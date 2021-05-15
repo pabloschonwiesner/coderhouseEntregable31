@@ -8,18 +8,35 @@ const MongoStore = require('connect-mongo')
 const mongoose = require('mongoose')
 const Usuario = require('./models/usuario.model')
 const numCPUs = require('os').cpus().length
+const compression = require('compression')
+const log4js = require('log4js')
 
 const UsuarioServicio = require('./services/usuario.service')
 
 const app = express()
+app.use(compression())
 const usuarioServicio = new UsuarioServicio()
+
+// logger
+log4js.configure({
+  appenders: { 
+    fileWarn: { type: 'file', filename: './logs/warn.log'},
+    fileError: { type: 'file', filename: './logs/error.log'},
+    console: { type: 'console'}
+  },
+  categories: {
+    default: { appenders: [ 'console'], level: 'info'},
+    fileWarn: { appenders: [ 'fileWarn'], level: 'warn'},
+    fileError: { appenders: [ 'fileError'], level: 'error'}
+  }
+})
+const loggerConsola = log4js.getLogger()
+const loggerWarn = log4js.getLogger('fileWarn')
+const loggerError = log4js.getLogger('fileError')
 
 let facebookId, facebookSecret, port, arrObj = []
 
-console.log(process.argv)
-
 process.argv.forEach( arg => {
-  console.log(arg)
   let arrArg = arg.split('=')
   arrObj.push({ clave: arrArg[0], valor: arrArg[1]})
 })
@@ -90,10 +107,11 @@ passport.use('facebook', new FacebookStrategy({
       if(usuarioDB) {
         return cb(null, usuarioDB)
       } else {
+        loggerWarn.warn('No existe el usuario y se va a crear')
         let newUser = await usuarioServicio.add( profile )
         return cb(null, newUser)
       }
-    } catch ( err ) { console.log(err); return cb(err)}
+    } catch ( err ) { loggerError.error(err); return cb(err)}
   })
 )
 
@@ -115,7 +133,7 @@ app.get('/', (req, res) => {
 
 app.get('/perfil', checkIsAuthenticated, async  (req, res) => {
   let perfil = await usuarioServicio.getUserByIdFacebook(req.session.facebookId)
-  console.log(perfil)
+  loggerConsola.info(perfil)
   res.render('perfil', { perfil } )     
 })
 
@@ -147,8 +165,9 @@ app.get('/info', (req, res) => {
     processId: process.pid,
     directorioActual: process.cwd(),
     procesadores: numCPUs
-
   }
+
+  loggerConsola.info(infoProcess)
 
   res.render('process', { infoProcess } )
 })
@@ -175,7 +194,13 @@ app.get('/random', (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Escuchando el puerto ${port}`)
+  loggerConsola.info(`Escuchando el puerto ${port}`)
+
+  mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true}, (err) => {
+    if(err)  loggerError.error(err);
+    loggerConsola.info('Base de datos ONLINE')
+  })
 })
-app.on('error', (err) => { console.log(`Error de conexion: ${err}`)})
+
+app.on('error', (err) => { loggerError.error(`Error de conexion: ${err}`) })
 

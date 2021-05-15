@@ -1,0 +1,30 @@
+[2021-05-15T15:46:39.415] [ERROR] fileError - MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+    at NativeConnection.Connection.openUri (C:\Proyectos\Coderhouse\Backend\Clases\Clase31\entregable\node_modules\mongoose\lib\connection.js:846:32)
+    at C:\Proyectos\Coderhouse\Backend\Clases\Clase31\entregable\node_modules\mongoose\lib\index.js:350:10
+    at promiseOrCallback (C:\Proyectos\Coderhouse\Backend\Clases\Clase31\entregable\node_modules\mongoose\lib\helpers\promiseOrCallback.js:9:12)
+    at Mongoose._promiseOrCallback (C:\Proyectos\Coderhouse\Backend\Clases\Clase31\entregable\node_modules\mongoose\lib\index.js:1154:10)
+    at Mongoose.connect (C:\Proyectos\Coderhouse\Backend\Clases\Clase31\entregable\node_modules\mongoose\lib\index.js:349:20)
+    at Server.<anonymous> (C:\Proyectos\Coderhouse\Backend\Clases\Clase31\entregable\index.js:199:12)
+    at Object.onceWrapper (events.js:421:28)
+    at Server.emit (events.js:315:20)
+    at emitListeningNT (net.js:1352:10)
+    at processTicksAndRejections (internal/process/task_queues.js:79:21) {
+  reason: TopologyDescription {
+    type: 'Single',
+    setName: null,
+    maxSetVersion: null,
+    maxElectionId: null,
+    servers: Map(1) { 'localhost:27017' => [ServerDescription] },
+    stale: false,
+    compatible: true,
+    compatibilityError: null,
+    logicalSessionTimeoutMinutes: null,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    commonWireVersion: null
+  }
+}
+[2021-05-15T15:48:14.262] [ERROR] fileError - MongooseError: Operation `usuarios.findOne()` buffering timed out after 10000ms
+    at Timeout.<anonymous> (C:\Proyectos\Coderhouse\Backend\Clases\Clase31\entregable\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:185:20)
+    at listOnTimeout (internal/timers.js:554:17)
+    at processTimers (internal/timers.js:497:7)
