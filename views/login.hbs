@@ -1,0 +1,16 @@
+<div class="container">
+  <form action="/ingresar" method="post">
+    <div class="nav-wrapper teal white-text">
+      <p>Login</p>
+      <p>{{text}}</p>
+    </div>
+    {{#if usuarioExistente}}
+      <div class="row">
+        <p class="usuarioExistente">Su usuario ya existe. Inicie sesión.</p>
+      </div>
+    {{/if}}
+    
+    <button formaction="/auth/facebook" formmethod="GET" class="waves-effect waves-light btn-large blue darken-4">Ingresar con Facebook</button>
+    
+  </form>
+  </div>

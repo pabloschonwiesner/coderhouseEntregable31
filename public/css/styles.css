@@ -1,0 +1,25 @@
+.nav-wrapper {
+  padding: 5px;
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.dato { 
+  font-size: 1.5rem;
+}
+
+.visitas {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+h6 { color: #ccc}
+
+table {
+  margin-top: 40px;
+}
+
+.usuarioExistente {
+  color: red;
+  
+}
